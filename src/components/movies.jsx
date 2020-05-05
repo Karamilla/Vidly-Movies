@@ -1,10 +1,14 @@
 import React, { Component } from "react";
 import { getMovies } from "../services/fakeMovieService";
-import Like from "./like";
+import Like from "./common/like";
+import Pagination from "./common/pagination";
+import { paginate } from "../utils/paginate";
 
 class Movies extends Component {
   state = {
     movies: getMovies(),
+    currentPage: 1,
+    pageSize: 4,
   };
 
   handleLike = (movie) => {
@@ -19,20 +23,26 @@ class Movies extends Component {
     const movies = this.state.movies.filter((m) => m._id !== movie._id);
     this.setState({ movies });
   };
+  handlePageChange = (page) => {
+    this.setState({ currentPage: page });
+  };
 
   render() {
     const { length: count } = this.state.movies;
+    const { currentPage, pageSize, movies: allMovies } = this.state;
     if (count === 0)
       return (
         <div className="  alert alert-danger" role="alert">
-          <h1 className="h1">There in no movies in the table</h1>
+          <h1 className="h1">There in no movies in the application</h1>
         </div>
       );
+
+    const movies = paginate(allMovies, currentPage, pageSize);
 
     return (
       <div>
         <div class="alert alert-primary" role="alert">
-          <h1 className="h1">Showing {count} movies in the table</h1>
+          <h1 className="h1">Showing {count} movies in the application</h1>
         </div>
 
         <table class="table table-dark ">
@@ -43,11 +53,11 @@ class Movies extends Component {
               <td class="bg-primary">Stock</td>
               <td class="bg-primary">Rate</td>
               <td className="bg-primary"></td>
-              <td className="bg-primary">Delete</td>
+              <td className="bg-primary"></td>
             </tr>
           </thead>
           <tbody>
-            {this.state.movies.map((movie) => (
+            {movies.map((movie) => (
               <tr key={movie._id}>
                 <td>{movie.title}</td>
                 <td>{movie.genre.name}</td>
@@ -71,6 +81,12 @@ class Movies extends Component {
             ))}
           </tbody>
         </table>
+        <Pagination
+          itemsCount={count}
+          pageSize={pageSize}
+          onPageChange={this.handlePageChange}
+          currentPage={currentPage}
+        />
       </div>
     );
   }
