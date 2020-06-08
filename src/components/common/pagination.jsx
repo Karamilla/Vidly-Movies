@@ -14,8 +14,8 @@ const Pagination = (props) => {
     <div>
       <div className=" d-flex justify-content-center">
         <ul className="pagination ">
-          <li class="page-item">
-            <a class="page-link">Previous</a>
+          <li className="page-item">
+            <a className="page-link">Previous</a>
           </li>
           {pages.map((page) => (
             <li
@@ -29,8 +29,8 @@ const Pagination = (props) => {
               </a>
             </li>
           ))}
-          <li class="page-item">
-            <a class="page-link">Next</a>
+          <li className="page-item">
+            <a className="page-link">Next</a>
           </li>
         </ul>
       </div>
